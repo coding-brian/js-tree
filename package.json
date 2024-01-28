@@ -1,0 +1,21 @@
+{
+  "name": "js-tree",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "eslint": "eslint --fix .ts",
+    "test": "ts-node-esm test.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "eslint": "^8.56.0",
+    "eslint-plugin-typescript": "^0.14.0",
+    "typescript": "^5.3.3",
+    "typescript-eslint-parser": "^22.0.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.6.1",
+    "@types/node": "^20.10.5"
+  }
+}
