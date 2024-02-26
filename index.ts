@@ -134,9 +134,37 @@ class Tree {
       return null
 
     const root = nodes.find(node => node.id === null)
+
+    if (!root)
+      return null
+
+    const setChildren = (nodes: Array<Node>, node: Node, keys: Array<string>): void => {
+      const parents = nodes.filter(item => item.id === node.parentId)
+      if (!parents || parents.length === 0)
+        return
+
+      const parent = parents[0]
+
+      if (keys.includes(parent.id))
+        return
+
+      parent.children?.push(node)
+
+      if (parent.parentId === null)
+        return
+
+      keys.push(parent.id)
+
+      return setChildren(nodes, parent, keys)
+    }
+
+    const keys: Array<string> = []
+
+    for (const leaf of leaves)
+      setChildren(nodes, leaf, keys)
+
     return new Tree(root!)
   }
 }
 
 export { Node, Tree }
-
