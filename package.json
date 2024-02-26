@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "eslint": "eslint --fix .ts",
-    "test": "ts-node-esm test.ts",
+    "dev": "ts-node-esm test.ts",
     "build": "tsc"
   },
   "dependencies": {

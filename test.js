@@ -1,6 +1,5 @@
 import categories from './data/product-category.js';
 import { Node, Tree } from './index.js';
-
 const datas = [];
 for (const item of categories)
     datas.push(new Node(item.id, item.parentCategoryId, null, item));
