@@ -56,8 +56,8 @@ class Tree {
 
   /**
    * 搜尋節點
-   * @param id {string} id node 的 id
-   * @param node {Node} 節點
+   * @param {string} id  id node 的 id
+   * @param {Node} currntNode  節點
    * @returns {(Node|null)} 節點
    */
   private findNode(id: string, currntNode: Node): Node | null {
@@ -119,6 +119,24 @@ class Tree {
 
     return tree
   }
+
+  /**
+   * 建立樹
+   * @param {Array<Node>} nodes 節點
+   * @param {Array<Node>} leaves 樹葉
+   * @returns {Tree} 樹
+   */
+  static buildFromLeaf(nodes: Array<Node>, leaves: Array<Node>): Tree | null | undefined {
+    if (!leaves || leaves.length === 0)
+      return null
+
+    if (!nodes || nodes.length === 0)
+      return null
+
+    const root = nodes.find(node => node.id === null)
+    return new Tree(root!)
+  }
 }
 
 export { Node, Tree }
+
