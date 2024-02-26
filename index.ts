@@ -57,7 +57,7 @@ class Tree {
   /**
    * 搜尋節點
    * @param id {string} id node 的 id
-   * @param currntNode {Node} 節點
+   * @param node {Node} 節點
    * @returns {(Node|null)} 節點
    */
   private findNode(id: string, currntNode: Node): Node | null {
@@ -116,59 +116,6 @@ class Tree {
 
     const tree = new Tree(root!)
     tree.height = getMaxHeight(heightArray)
-
-    return tree
-  }
-
-  /**
-   * 從樹葉建立樹
-   * @param {Array<Node} leaves 樹葉
-   * @param {Array<Node} allNodes 全部的節點
-   * @returns {Tree} 樹
-   */
-  static buildFromLeaves(leaves: Array<Node>, allNodes: Array<Node>): Tree | null | undefined {
-    let root = allNodes.find(leaf => leaf.id === null)
-
-    if (!root) {
-      root = new Node(null, undefined, [])
-      allNodes.push(root)
-    }
-
-    const setParents = (leaf: Node, alreadyFoundParentId: Array<string>): boolean => {
-      const parent = allNodes.find(node => node.id === leaf.parentId)
-
-      if (!parent)
-        return false
-
-      if (parent.children) {
-        if (parent.id === null) {
-          // eslint-disable-next-line no-console
-          console.log(parent)
-        }
-        parent.children.push(leaf)
-      }
-
-      // eslint-disable-next-line no-console
-      console.log(parent.id, parent.children)
-
-      if (alreadyFoundParentId.includes(parent.id)) {
-        return false
-      }
-      else {
-        alreadyFoundParentId.push(parent.id)
-        return setParents(parent, alreadyFoundParentId)
-      }
-    }
-
-    const alreadyFoundParentId: Array<string> = []
-    leaves.forEach((leaf) => {
-      setParents(leaf, alreadyFoundParentId)
-    })
-
-    // eslint-disable-next-line no-console
-    console.log('root', root)
-
-    const tree = new Tree(root!)
 
     return tree
   }
