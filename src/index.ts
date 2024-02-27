@@ -56,6 +56,28 @@ class Tree {
   }
 
   /**
+   * 加入一個節點
+   * @param {Node} node 節點
+   * @returns {boolean} 加入是否成功
+   */
+  public addNode(node: Node): boolean {
+    if (!node)
+      return false
+
+    if (this.find(node.id))
+      return true
+
+    const parent = this.find(node.parentId)
+
+    if (!parent)
+      return false
+
+    parent.children.push(node)
+
+    return true
+  }
+
+  /**
    * 搜尋節點
    * @param {string} id  id node 的 id
    * @param {Node} currntNode  節點
@@ -198,7 +220,6 @@ function getTreeHeight(root: Node): number {
  * @param {Node} root 根
  */
 function setLevel(root: Node): void {
-
   const setNodeLevel = (target: Node, level: number): void => {
     target.level = level
 
