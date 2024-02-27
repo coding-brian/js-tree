@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "eslint": "eslint . --fix ",
-    "dev": "tsc && ts-node-esm test.ts"
+    "dev": "ts-node-esm ./tests/test.ts",
+    "build":"tsc"
   },
   "dependencies": {
     "@antfu/eslint-config": "^2.6.4",
