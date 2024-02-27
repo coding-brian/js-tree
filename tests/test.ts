@@ -12,10 +12,14 @@ for (const item of nodes)
 for (const item of leaves)
   test.push(new Node(item.id, item.parentCategoryId, null, item))
 
-const tree = Tree.buildFromLeaf(datas, test)
+const treeFromLeaf = Tree.buildFromLeaf(datas, test)
 
 // eslint-disable-next-line no-console
-console.log(tree)
+console.log('treeFromLeaf', treeFromLeaf)
+
+// const tree = Tree.build(datas)
 
 // eslint-disable-next-line no-console
-console.log(tree?.find('1'))
+// console.log('tree', tree)
+
+// console.log(tree?.find('1'))

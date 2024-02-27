@@ -7,7 +7,7 @@
   "scripts": {
     "eslint": "eslint . --fix ",
     "dev": "ts-node-esm ./tests/test.ts",
-    "build":"tsc"
+    "build": "tsc"
   },
   "dependencies": {
     "@antfu/eslint-config": "^2.6.4",

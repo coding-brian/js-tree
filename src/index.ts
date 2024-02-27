@@ -10,7 +10,7 @@ class Node {
   constructor(id: any, parentId: any, children: Array<Node> | null | undefined, parameters?: object) {
     this.id = id
     this.parentId = parentId
-    this.children = children??[]
+    this.children = children ?? []
     this.height = 0
 
     if (parameters) {
@@ -86,15 +86,11 @@ class Tree {
   static build(nodes: Array<Node>): Tree | null | undefined {
     const root = nodes.find(node => node.id === null)
 
-    if (root === null)
+    if (!root)
       return null
 
     const rootHeight = 1
     const heightArray: Array<number> = [rootHeight]
-
-    const getMaxHeight = (height: Array<number>): number => {
-      return Math.max(...height)
-    }
 
     const getChildren = (node: Node, all: Array<Node>, parentHeight: number): void => {
       const currentHeight = parentHeight + 1
@@ -104,7 +100,7 @@ class Tree {
         return
 
       for (const child of children) {
-        child.height = currentHeight
+        child.height = currentHeight - 1
         heightArray.push(currentHeight)
         getChildren(child, all, currentHeight)
       }
@@ -112,12 +108,42 @@ class Tree {
       node.children = children
     }
 
-    getChildren(root!, nodes, rootHeight)
+    getChildren(root, nodes, rootHeight)
 
-    const tree = new Tree(root!)
-    tree.height = getMaxHeight(heightArray)
+    const tree = new Tree(root)
+
+    tree.height = Tree.getTreeHeight(root)
 
     return tree
+  }
+
+  /**
+   * 取得根的高度
+   * @param {Node} root 跟
+   * @returns
+   */
+  static getTreeHeight(root: Node): number {
+    if (!root)
+      return 0
+
+    if (!root.children)
+      return 0
+
+    const heightArray: Array<number> = [1]
+
+    const setHeight = (node: Node, height: number): void => {
+      if (!node.children || node.children.length === 0) {
+        heightArray.push(height)
+        return
+      }
+
+      for (const child of node.children)
+        setHeight(child, height + 1)
+    }
+
+    setHeight(root, 1)
+
+    return Math.max(...heightArray)
   }
 
   /**
@@ -146,15 +172,14 @@ class Tree {
         return
 
       const parent = parents[0]
-      
+
       parent.children!.push(node)
 
       if (keys.includes(parent.id))
         return
 
-      if (parent.id === null) {
+      if (parent.id === null)
         return
-      }
 
       return setChildren(nodes, parent, keys)
     }
@@ -164,7 +189,11 @@ class Tree {
     for (const leaf of leaves)
       setChildren(nodes, leaf, keys)
 
-    return new Tree(root!)
+    const tree = new Tree(root)
+
+    tree.height = Tree.getTreeHeight(root)
+
+    return tree
   }
 }
 
