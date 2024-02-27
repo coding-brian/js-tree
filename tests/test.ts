@@ -1,6 +1,6 @@
 import nodes from '../data/nodes.js'
 import leaves from '../data/leaves.js'
-import { Node, Tree } from '../src/index.js'
+import { Node, build, buildFromLeaf } from '../src/index.js'
 
 const datas: Array<Node> = []
 
@@ -12,14 +12,12 @@ for (const item of nodes)
 for (const item of leaves)
   test.push(new Node(item.id, item.parentCategoryId, null, item))
 
-const treeFromLeaf = Tree.buildFromLeaf(datas, test)
+const treeFromLeaf = buildFromLeaf(datas, test)
 
-// eslint-disable-next-line no-console
-console.log('treeFromLeaf', treeFromLeaf)
+// console.log('treeFromLeaf', treeFromLeaf)
 
-// const tree = Tree.build(datas)
+const tree = build(datas)
 
-// eslint-disable-next-line no-console
-// console.log('tree', tree)
+console.log('tree', tree)
 
-// console.log(tree?.find('1'))
+console.log(tree?.find('1-3-2'))

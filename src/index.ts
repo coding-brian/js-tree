@@ -6,12 +6,13 @@ class Node {
   /**
    * 與 root 的距離
    */
-  public height: number
+  public level: number
+
   constructor(id: any, parentId: any, children: Array<Node> | null | undefined, parameters?: object) {
     this.id = id
     this.parentId = parentId
     this.children = children ?? []
-    this.height = 0
+    this.level = 0
 
     if (parameters) {
       for (const key in parameters)
@@ -77,124 +78,138 @@ class Tree {
 
     return null
   }
-
-  /**
-   * 建立樹
-   * @param {Array<Node>} nodes 節點
-   * @returns {Tree} 樹
-   */
-  static build(nodes: Array<Node>): Tree | null | undefined {
-    const root = nodes.find(node => node.id === null)
-
-    if (!root)
-      return null
-
-    const rootHeight = 1
-    const heightArray: Array<number> = [rootHeight]
-
-    const getChildren = (node: Node, all: Array<Node>, parentHeight: number): void => {
-      const currentHeight = parentHeight + 1
-      const children = all.filter(item => item.parentId === node.id)
-
-      if (children.length <= 0)
-        return
-
-      for (const child of children) {
-        child.height = currentHeight - 1
-        heightArray.push(currentHeight)
-        getChildren(child, all, currentHeight)
-      }
-
-      node.children = children
-    }
-
-    getChildren(root, nodes, rootHeight)
-
-    const tree = new Tree(root)
-
-    tree.height = Tree.getTreeHeight(root)
-
-    return tree
-  }
-
-  /**
-   * 取得根的高度
-   * @param {Node} root 跟
-   * @returns
-   */
-  static getTreeHeight(root: Node): number {
-    if (!root)
-      return 0
-
-    if (!root.children)
-      return 0
-
-    const heightArray: Array<number> = [1]
-
-    const setHeight = (node: Node, height: number): void => {
-      if (!node.children || node.children.length === 0) {
-        heightArray.push(height)
-        return
-      }
-
-      for (const child of node.children)
-        setHeight(child, height + 1)
-    }
-
-    setHeight(root, 1)
-
-    return Math.max(...heightArray)
-  }
-
-  /**
-   * 建立樹
-   * @param {Array<Node>} nodes 節點
-   * @param {Array<Node>} leaves 樹葉
-   * @returns {Tree} 樹
-   */
-  static buildFromLeaf(nodes: Array<Node>, leaves: Array<Node>): Tree | null | undefined {
-    if (!leaves || leaves.length === 0)
-      return null
-
-    if (!nodes || nodes.length === 0)
-      return null
-
-    const root = nodes.find(node => node.id === null)
-
-    if (!root)
-      return null
-
-    const setChildren = (nodes: Array<Node>, node: Node, keys: Array<string>): void => {
-      keys.push(node.id)
-
-      const parents = nodes.filter(item => item.id === node.parentId)
-      if (!parents || parents.length === 0)
-        return
-
-      const parent = parents[0]
-
-      parent.children!.push(node)
-
-      if (keys.includes(parent.id))
-        return
-
-      if (parent.id === null)
-        return
-
-      return setChildren(nodes, parent, keys)
-    }
-
-    const keys: Array<string> = []
-
-    for (const leaf of leaves)
-      setChildren(nodes, leaf, keys)
-
-    const tree = new Tree(root)
-
-    tree.height = Tree.getTreeHeight(root)
-
-    return tree
-  }
 }
 
-export { Node, Tree }
+/**
+ * 建立樹
+ * @param {Array<Node>} nodes 節點
+ * @returns {Tree} 樹
+ */
+function build(nodes: Array<Node>): Tree | null | undefined {
+  const root = nodes.find(node => node.id === null)
+
+  if (!root)
+    return null
+
+  const getChildren = (node: Node, all: Array<Node>): void => {
+    const children = all.filter(item => item.parentId === node.id)
+
+    if (children.length <= 0)
+      return
+
+    for (const child of children)
+      getChildren(child, all)
+
+    node.children = children
+  }
+
+  getChildren(root, nodes)
+
+  setLevel(root)
+  const tree = new Tree(root)
+
+  tree.height = getTreeHeight(root)
+
+  return tree
+}
+
+/**
+ * 建立樹
+ * @param {Array<Node>} nodes 節點
+ * @param {Array<Node>} leaves 樹葉
+ * @returns {Tree} 樹
+ */
+function buildFromLeaf(nodes: Array<Node>, leaves: Array<Node>): Tree | null | undefined {
+  if (!leaves || leaves.length === 0)
+    return null
+
+  if (!nodes || nodes.length === 0)
+    return null
+
+  const root = nodes.find(node => node.id === null)
+
+  if (!root)
+    return null
+
+  const setChildren = (nodes: Array<Node>, node: Node, keys: Array<string>): void => {
+    keys.push(node.id)
+
+    const parents = nodes.filter(item => item.id === node.parentId)
+    if (!parents || parents.length === 0)
+      return
+
+    const parent = parents[0]
+
+    parent.children!.push(node)
+
+    if (keys.includes(parent.id))
+      return
+
+    if (parent.id === null)
+      return
+
+    return setChildren(nodes, parent, keys)
+  }
+
+  const keys: Array<string> = []
+
+  for (const leaf of leaves)
+    setChildren(nodes, leaf, keys)
+
+  setLevel(root)
+  const tree = new Tree(root)
+
+  tree.height = getTreeHeight(root)
+
+  return tree
+}
+
+/**
+ * 取得樹的高度
+ * @param {Node} root 根
+ * @returns
+ */
+function getTreeHeight(root: Node): number {
+  if (!root)
+    return 0
+
+  if (!root.children)
+    return 0
+
+  const heightArray: Array<number> = [1]
+
+  const setHeight = (node: Node, height: number): void => {
+    if (!node.children || node.children.length === 0) {
+      heightArray.push(height)
+      return
+    }
+
+    for (const child of node.children)
+      setHeight(child, height + 1)
+  }
+
+  setHeight(root, 1)
+
+  return Math.max(...heightArray)
+}
+
+/**
+ * 設定層級
+ * @param {Node} root 根
+ */
+function setLevel(root: Node): void {
+
+  const setNodeLevel = (target: Node, level: number): void => {
+    target.level = level
+
+    if (!target.children || target.children.length === 0)
+      return
+
+    for (const child of target.children)
+      setNodeLevel(child, level + 1)
+  }
+
+  setNodeLevel(root, 0)
+}
+
+export { Node, Tree, build, buildFromLeaf }
