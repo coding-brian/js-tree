@@ -10,3 +10,5 @@ for (const item of leaves)
 const tree = Tree.buildFromLeaf(datas, test);
 // eslint-disable-next-line no-console
 console.log(tree);
+// eslint-disable-next-line no-console
+console.log(tree?.find('1'));
