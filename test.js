@@ -1,10 +1,12 @@
-import categories from './data/product-category.js'
-import { Node } from './index.js'
-
-const datas = []
-for (const item of categories)
-  datas.push(new Node(item.id, item.parentCategoryId, null, item))
-// const tree = Tree.build(datas)
-// const id = '08dbba56-36bd-4832-8be6-d61a4e5d89ad'
-// console.log(tree)
-// console.log(`分支度:${tree?.getDegree(id)}`)
+import nodes from './data/nodes.js';
+import leaves from './data/leaves.js';
+import { Node, Tree } from './index.js';
+const datas = [];
+const test = [];
+for (const item of nodes)
+    datas.push(new Node(item.id, item.parentCategoryId, null, item));
+for (const item of leaves)
+    test.push(new Node(item.id, item.parentCategoryId, null, item));
+const tree = Tree.buildFromLeaf(datas, test);
+// eslint-disable-next-line no-console
+console.log(tree);

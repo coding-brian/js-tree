@@ -1,19 +1,18 @@
-import categories from './data/product-category.js'
+import nodes from './data/nodes.js'
+import leaves from './data/leaves.js'
 import { Node, Tree } from './index.js'
 
 const datas: Array<Node> = []
 
-for (const item of categories)
+const test: Array<Node> = []
+
+for (const item of nodes)
   datas.push(new Node(item.id, item.parentCategoryId, null, item))
 
-const tree = Tree.build(datas)
+for (const item of leaves)
+  test.push(new Node(item.id, item.parentCategoryId, null, item))
 
-const id = '08dbba56-36bd-4832-8be6-d61a4e5d89ad'
-
-// const node = tree?.find(id)
+const tree = Tree.buildFromLeaf(datas, test)
 
 // eslint-disable-next-line no-console
 console.log(tree)
-
-// eslint-disable-next-line no-console
-console.log(`分支度:${tree?.getDegree(id)}`)

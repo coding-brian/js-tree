@@ -1,7 +1,7 @@
 class Node {
   public id: any
   public parentId: any
-  public children: Array<Node> | null | undefined
+  public children: Array<Node>
 
   /**
    * 與 root 的距離
@@ -10,7 +10,7 @@ class Node {
   constructor(id: any, parentId: any, children: Array<Node> | null | undefined, parameters?: object) {
     this.id = id
     this.parentId = parentId
-    this.children = children
+    this.children = children??[]
     this.height = 0
 
     if (parameters) {
@@ -89,7 +89,7 @@ class Tree {
     if (root === null)
       return null
 
-    const rootHeight = 0
+    const rootHeight = 1
     const heightArray: Array<number> = [rootHeight]
 
     const getMaxHeight = (height: Array<number>): number => {
@@ -139,21 +139,22 @@ class Tree {
       return null
 
     const setChildren = (nodes: Array<Node>, node: Node, keys: Array<string>): void => {
+      keys.push(node.id)
+
       const parents = nodes.filter(item => item.id === node.parentId)
       if (!parents || parents.length === 0)
         return
 
       const parent = parents[0]
+      
+      parent.children!.push(node)
 
       if (keys.includes(parent.id))
         return
 
-      parent.children?.push(node)
-
-      if (parent.parentId === null)
+      if (parent.id === null) {
         return
-
-      keys.push(parent.id)
+      }
 
       return setChildren(nodes, parent, keys)
     }
