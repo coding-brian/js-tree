@@ -1,6 +1,6 @@
-import nodes from '../data/nodes.js'
-import leaves from '../data/leaves.js'
-import { Node, build, buildFromLeaf } from '../src/index.js'
+import nodes from '../data/nodes.ts'
+import leaves from '../data/leaves.ts'
+import { Node, build, buildFromLeaf } from '../src/index.ts'
 
 const datas: Array<Node> = []
 
