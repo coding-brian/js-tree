@@ -15,3 +15,4 @@ dist
 temp
 types/v3-generated.d.ts
 index.js
+coverage
