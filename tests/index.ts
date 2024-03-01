@@ -11,12 +11,22 @@ function initialTree(nodes: Array<Node>): Tree | null | undefined {
   return build(nodes)
 }
 
-it('addNode', () => {
+it('加入一個 node，成功', () => {
   const node = new Node('4', null, null)
   const tree = initialTree(datas)
 
-  tree?.addNode(node)
+  const result = tree!.addNode(node)
+
   const target = tree?.find(node.id)
-  
-  expect(target?.id).toBe(node.id)
+
+  expect(result).toBe(true)
+})
+
+it('根據 id 找node，成功', () => {
+  const tree = initialTree(datas)
+  const root = tree?.find(null)
+  const node = tree?.find('1-3-3')
+
+  expect(root).toBeTruthy()
+  expect(node).toBeTruthy()
 })

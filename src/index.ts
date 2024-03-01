@@ -36,7 +36,7 @@ class Tree {
    * @param {string} id node 的 id
    * @returns {Node} 節點
    */
-  public find(id: string): Node | null {
+  public find(id: string | null): Node | null {
     const result = this.findNode(id, this.root)
 
     return result
@@ -83,7 +83,7 @@ class Tree {
    * @param {Node} currntNode  節點
    * @returns {(Node|null)} 節點
    */
-  private findNode(id: string, currntNode: Node): Node | null {
+  private findNode(id: string | null, currntNode: Node): Node | null {
     if (currntNode.id === id)
 
       return currntNode
