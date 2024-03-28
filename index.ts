@@ -7,6 +7,17 @@ class Node {
    * 與 root 的距離
    */
   public height: number
+
+  /**
+   * 取得 node 的分支度
+   */
+  get degree(): number {
+    if (!this.children)
+      return 0
+
+    return this.children.length
+  }
+
   constructor(id: any, parentId: any, children: Array<Node> | null | undefined, parameters?: object) {
     this.id = id
     this.parentId = parentId
@@ -31,14 +42,43 @@ class Tree {
   }
 
   /**
+   * 取得樹的分支度
+   */
+  get degree(): number {
+    if (!this.root)
+      return 0
+    let degrees: Array<number> = []
+
+    /**
+     * 取得全部 node 的 degree
+     * @param node 節點
+     * @param result 結果
+     * @returns {Array<number>} 結果
+     */
+    const getNodeDegree = (node: Node, result: Array<number>): Array<number> => {
+      if (!node.children || node.children.length === 0)
+        return result
+
+      result.push(node.children.length)
+
+      for (const child of node.children)
+        getNodeDegree(child, result)
+
+      return result
+    }
+
+    degrees = getNodeDegree(this.root, degrees)
+
+    return Math.max(...degrees)
+  }
+
+  /**
    * 取得特定節點
    * @param {string} id node 的 id
    * @returns {Node} 節點
    */
   public find(id: string): Node | null {
-    const result = this.findNode(id, this.root)
-
-    return result
+    return this.findNode(id, this.root)
   }
 
   /**
@@ -48,8 +88,8 @@ class Tree {
    */
   public getDegree(id: string): number {
     const node = this.find(id)
-    if (node && node.children)
-      return node.children.length
+    if (node)
+      return node.degree
 
     return 0
   }
@@ -122,7 +162,7 @@ class Tree {
 
   /**
    * 建立樹
-   * @param {Array<Node>} nodes 節點
+   * @param {Array<Node>} nodes 全部節點
    * @param {Array<Node>} leaves 樹葉
    * @returns {Tree} 樹
    */
